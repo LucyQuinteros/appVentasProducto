@@ -1,18 +1,13 @@
+
+
+# Blueprint de Render: crea el servicio web de la API a partir del Dockerfile
 services:
-
-type: web
-name: appVentasProducto
-env: python
-plan: free
-region: oregon # Puedes usar frankfurt, ohio, oregon o singapore
-rootDir: backend # Apunta a tu carpeta backend
-buildCommand: pip install -r requirements.txt
-startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
-envVars:
-
-key: PYTHON_VERSION
-value: 3.11.9
-
-key: DATABASE_URL
-sync: false # Te pedirá el valor secreto en el dashboard de Render sin exponerlo en GitHub
-
+  - type: web
+    name: appVentasProducto
+    runtime: docker
+    plan: free
+    region: virginia # misma zona que Supabase (us-east-1): consultas mucho mas rapidas
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        sync: false # cadena del Session pooler de Supabase (se pega en el panel de Render)
